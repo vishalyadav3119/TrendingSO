@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TrendingSO</string>
+    <string name="searchbar_hint">Search a Question</string>
 </resources>
