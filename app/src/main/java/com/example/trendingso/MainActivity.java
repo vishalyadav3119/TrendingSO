@@ -4,22 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 
+import com.example.trendingso.data.JsonResponse;
 import com.example.trendingso.databinding.ActivityMainBinding;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.HttpException;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             runOnUiThread(() -> {
-                                questionsAdapter.submitList(response.body().questions);
+                                binding.progressBar.setVisibility(View.INVISIBLE);
+                                questionsAdapter.submitList(response.body().getQuestions());
                             });
                         } else {
                             Log.e(TAG, "onResponse: response not successful for api" );

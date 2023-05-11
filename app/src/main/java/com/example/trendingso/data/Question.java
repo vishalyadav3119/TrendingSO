@@ -1,6 +1,5 @@
-package com.example.trendingso;
+package com.example.trendingso.data;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
