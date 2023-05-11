@@ -31,23 +31,23 @@ public class MainActivity extends AppCompatActivity {
         setupRecyclerView();
         new Thread(() ->
                 RetroFitInstance.getInstance().getQuestions(ORDER, SORT, SITE,FILTER,KEY)
-                .enqueue(new Callback<JsonResponse>() {
-                    @Override
-                    public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            runOnUiThread(() -> {
-                                binding.progressBar.setVisibility(View.INVISIBLE);
-                                questionsAdapter.submitList(response.body().getQuestions());
-                            });
-                        } else {
-                            Log.e(TAG, "onResponse: response not successful for api" );
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<JsonResponse> call, Throwable t) {
-                        Log.e(TAG, "onFailure: Failed API get request: "+t.getMessage());
-                    }
-                })).start();
+                        .enqueue(new Callback<JsonResponse>() {
+                            @Override
+                            public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    runOnUiThread(() -> {
+                                        binding.progressBar.setVisibility(View.INVISIBLE);
+                                        questionsAdapter.submitList(response.body().getQuestions());
+                                    });
+                                } else {
+                                    Log.e(TAG, "onResponse: response not successful for api" );
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<JsonResponse> call, Throwable t) {
+                                Log.e(TAG, "onFailure: Failed API get request: "+t.getMessage());
+                            }
+                        })).start();
     }
     private void setupRecyclerView(){
         questionsAdapter = new QuestionsAdapter();
