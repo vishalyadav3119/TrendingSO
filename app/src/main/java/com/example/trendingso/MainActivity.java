@@ -26,11 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
     private QuestionsAdapter questionsAdapter;
-    private final long FROM_DATE = 1682899200;
-    private final long TO_DATE = 1683676800;
     private final String ORDER = "desc";
     private final String SORT = "hot";
     private final String SITE = "stackoverflow";
+    private final String FILTER = "!-NPfkDD6rjlaOThHZ8L7x1y6YZW8FbktT";
     private final String KEY = "GkQFPf46lyw8PfbEMXVvyw((";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupRecyclerView();
         new Thread(() ->
-                RetroFitInstance.getInstance().getQuestions(FROM_DATE, TO_DATE, ORDER, SORT, SITE,KEY)
+                RetroFitInstance.getInstance().getQuestions(ORDER, SORT, SITE,FILTER,KEY)
                 .enqueue(new Callback<JsonResponse>() {
                     @Override
                     public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
