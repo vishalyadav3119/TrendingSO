@@ -21,12 +21,20 @@ public class QuestionsViewModel extends ViewModel {
     private MutableLiveData<List<Question>> mutableLiveData;
     public LiveData<List<Question>> liveData;
     QuestionsAPI questionsAPI;
+    OnDataSetListener listener;
     private final String ORDER = "desc";
     private final String SORT = "hot";
     private final String SITE = "stackoverflow";
     private final String FILTER = "!-NPfkDD6rjlaOThHZ8L7x1y6YZW8FbktT";
     private final String KEY = "GkQFPf46lyw8PfbEMXVvyw((";
-    {
+    public QuestionsViewModel(QuestionsAPI questionsAPI, OnDataSetListener listener) {
+        mutableLiveData = new MutableLiveData<>();
+        this.questionsAPI = questionsAPI;
+        this.listener = listener;
+        callAPI(questionsAPI);
+    }
+
+    private void callAPI(QuestionsAPI questionsAPI) {
         new Thread(()->{
             questionsAPI.getQuestions(ORDER,SORT ,SITE,FILTER,KEY).enqueue(new Callback<JsonResponse>() {
                 @Override
@@ -35,6 +43,7 @@ public class QuestionsViewModel extends ViewModel {
                         List<Question> questions = response.body().getQuestions();
                         mutableLiveData.setValue(questions);
                         liveData = mutableLiveData;
+                        listener.onComplete();
                     }else{
                         Log.e(TAG, "onResponse: API Response Error: "+ response.getClass() );
                     }
@@ -46,9 +55,5 @@ public class QuestionsViewModel extends ViewModel {
                 }
             });
         }).start();
-    }
-    public QuestionsViewModel(QuestionsAPI questionsAPI) {
-        mutableLiveData = new MutableLiveData<>();
-        this.questionsAPI = questionsAPI;
     }
 }
