@@ -33,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private final String SITE = "stackoverflow";
     private final String FILTER = "!-NPfkDD6rjlaOThHZ8L7x1y6YZW8FbktT";
     private final String KEY = "GkQFPf46lyw8PfbEMXVvyw((";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setupRecyclerView();
-        questionsViewModel = new ViewModelProvider(this,new QuestionViewModelFactory(RetroFitInstance.getInstance(), new OnDataSetListener() {
+        questionsViewModel = new ViewModelProvider(this, new QuestionViewModelFactory(RetroFitInstance.getInstance(), new OnDataSetListener() {
             @Override
             public void onComplete() {
                 questionsViewModel.liveData.observe(MainActivity.this, questions -> {
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         })).get(QuestionsViewModel.class);
 //        new Thread(this::callAPIAndUpdateUI).start();
     }
-    private void setupRecyclerView(){
+
+    private void setupRecyclerView() {
         questionsAdapter = new QuestionsAdapter();
         binding.recyclerView.setAdapter(questionsAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
