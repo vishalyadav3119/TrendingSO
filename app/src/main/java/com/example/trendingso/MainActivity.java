@@ -1,6 +1,7 @@
 package com.example.trendingso;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         setupRecyclerView();
         questionsViewModel = new ViewModelProvider(this,new QuestionViewModelFactory(RetroFitInstance.getInstance(), new OnDataSetListener() {
             @Override

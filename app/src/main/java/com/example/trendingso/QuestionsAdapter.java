@@ -36,7 +36,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
     @Override
     public void onBindViewHolder(@NonNull QuestionsAdapter.QuestionsViewHolder holder, int position) {
-        holder.binding.questionTitle.setText(mDiffer.getCurrentList().get(position).getTitle());
+        holder.binding.setQuestion(mDiffer.getCurrentList().get(position));
+        holder.binding.executePendingBindings();
     }
 
     @Override
