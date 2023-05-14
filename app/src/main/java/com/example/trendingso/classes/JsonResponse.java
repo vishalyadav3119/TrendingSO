@@ -1,4 +1,4 @@
-package com.example.trendingso.data;
+package com.example.trendingso.classes;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,23 +1,20 @@
 package com.example.trendingso.viewmodels;
 
-import android.app.Application;
-
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.trendingso.QuestionsAPI;
+import com.example.trendingso.QuestionRepository;
+import com.example.trendingso.data.QuestionsAPI;
 
 public class QuestionViewModelFactory implements ViewModelProvider.Factory {
-    private QuestionsAPI questionsAPI;
-    private OnDataSetListener listener;
+    private QuestionRepository questionRepository;
 
-    public QuestionViewModelFactory(QuestionsAPI questionsAPI,OnDataSetListener listener) {
-        this.questionsAPI = questionsAPI;
-        this.listener = listener;
+    public QuestionViewModelFactory(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new QuestionsViewModel(questionsAPI,listener);
+        return (T) new QuestionsViewModel(questionRepository);
     }
 }

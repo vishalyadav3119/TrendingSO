@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trendingso.data.Question;
+import com.example.trendingso.classes.Question;
 import com.example.trendingso.databinding.ItemQuestionBinding;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
     @Override
     public void onBindViewHolder(@NonNull QuestionsAdapter.QuestionsViewHolder holder, int position) {
-        holder.binding.questionTitle.setText(mDiffer.getCurrentList().get(position).getTitle());
+        holder.binding.questionTitle.setText(mDiffer.getCurrentList().get(position).title);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
     private DiffUtil.ItemCallback<Question> diffCallback = new DiffUtil.ItemCallback<Question>() {
         @Override
         public boolean areItemsTheSame(@NonNull Question oldItem, @NonNull Question newItem) {
-            return oldItem.getQuestionId() == newItem.getQuestionId();
+            return oldItem.questionId.equals(newItem.questionId);
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Question oldItem, @NonNull Question newItem) {
-            return oldItem.getTitle().equals(newItem.getTitle());
+            return oldItem.title.equals(newItem.title);
         }
     };
     public void submitList(List<Question> data) {

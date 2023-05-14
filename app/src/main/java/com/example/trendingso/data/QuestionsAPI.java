@@ -1,6 +1,6 @@
-package com.example.trendingso;
+package com.example.trendingso.data;
 
-import com.example.trendingso.data.JsonResponse;
+import com.example.trendingso.classes.JsonResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
