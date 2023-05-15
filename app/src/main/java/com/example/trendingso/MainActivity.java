@@ -1,17 +1,22 @@
 package com.example.trendingso;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
-import com.example.trendingso.data.JsonResponse;
 import com.example.trendingso.data.Question;
 import com.example.trendingso.databinding.ActivityMainBinding;
 import com.example.trendingso.viewmodels.OnDataSetListener;
@@ -19,12 +24,6 @@ import com.example.trendingso.viewmodels.QuestionViewModelFactory;
 import com.example.trendingso.viewmodels.QuestionsViewModel;
 
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private QuestionsViewModel questionsViewModel;
@@ -43,15 +42,36 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setupRecyclerView();
-        questionsViewModel = new ViewModelProvider(this, new QuestionViewModelFactory(RetroFitInstance.getInstance(), new OnDataSetListener() {
-            @Override
-            public void onComplete() {
-                questionsViewModel.liveData.observe(MainActivity.this, questions -> {
-                    questionsAdapter.submitList(questions);
+        questionsViewModel = new ViewModelProvider(this, new QuestionViewModelFactory(RetroFitInstance.getInstance()))
+                .get(QuestionsViewModel.class);
+        questionsViewModel.callAPI(() -> {
+            questionsViewModel.questionLiveData.observe(MainActivity.this, questions -> {
+                questionsAdapter.submitList(questions);
+                if(questions != null){
+                    binding.progressBar.setVisibility(View.INVISIBLE);
+                }
+            });
+        });
+        binding.searchBar.setOnEditorActionListener((TextView.OnEditorActionListener) (textView, i, keyEvent) -> {
+            Log.e(TAG, "onCreate: +called");
+            Log.e(TAG, "onCreate: keyevenis "+keyEvent );
+            if(i == EditorInfo.IME_ACTION_GO){
+                hideKeyboard(this);
+                String text = textView.getText().toString();
+                binding.searchBar.getText().clear();
+                binding.progressBar.setVisibility(View.VISIBLE);
+                questionsViewModel.searchQuestions(text, () -> {
+                    questionsViewModel.searchLiveData.observe(MainActivity.this, questions -> {
+                        questionsAdapter.submitList(questions);
+                        if(questions != null){
+                            binding.progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 });
-                binding.progressBar.setVisibility(View.INVISIBLE);
+                return true;
             }
-        })).get(QuestionsViewModel.class);
+            return true;
+        });
     }
 
     private void setupRecyclerView() {
@@ -65,5 +85,13 @@ public class MainActivity extends AppCompatActivity {
         });
         binding.recyclerView.setAdapter(questionsAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

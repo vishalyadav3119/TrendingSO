@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class JsonResponse {
+public class QuestionsResponse {
     @SerializedName("items")
     List<Question> questions;
     @SerializedName("has_more")

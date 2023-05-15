@@ -9,15 +9,13 @@ import com.example.trendingso.QuestionsAPI;
 
 public class QuestionViewModelFactory implements ViewModelProvider.Factory {
     private QuestionsAPI questionsAPI;
-    private OnDataSetListener listener;
 
-    public QuestionViewModelFactory(QuestionsAPI questionsAPI,OnDataSetListener listener) {
+    public QuestionViewModelFactory(QuestionsAPI questionsAPI) {
         this.questionsAPI = questionsAPI;
-        this.listener = listener;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new QuestionsViewModel(questionsAPI,listener);
+        return (T) new QuestionsViewModel(questionsAPI);
     }
 }
