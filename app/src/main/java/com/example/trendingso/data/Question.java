@@ -32,7 +32,7 @@ public class Question {
     @SerializedName("last_activity_date")
     Integer lastActivityDate;
     @SerializedName("creation_date")
-    Integer creationDate;
+    Long creationDate;
     @SerializedName("last_edit_date")
     Integer lastEditDate;
     @SerializedName("question_id")
@@ -94,7 +94,7 @@ public class Question {
         return lastActivityDate;
     }
 
-    public Integer getCreationDate() {
+    public Long getCreationDate() {
         return creationDate;
     }
 
