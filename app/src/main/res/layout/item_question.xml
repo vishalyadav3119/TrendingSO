@@ -9,6 +9,7 @@
             name="question"
             type="com.example.trendingso.data.Question" />
     </data>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
@@ -28,17 +29,19 @@
                 android:layout_height="wrap_content"
                 android:text="@{question.title}"
                 android:textAppearance="?attr/textAppearanceTitleMedium" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:text="@{`asked by: `+question.owner.displayName}"
-                    />
+                    android:text="@{`asked by: `+question.owner.displayName}" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,11 +80,11 @@
             </LinearLayout>
 
             <LinearLayout
-                app:loadTags="@{question.tags}"
                 android:id="@+id/tags_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:loadTags="@{question.tags}">
 
             </LinearLayout>
         </LinearLayout>
