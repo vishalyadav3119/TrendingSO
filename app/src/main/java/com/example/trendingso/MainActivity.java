@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
-
         setupRecyclerView();
         questionsViewModel = new ViewModelProvider(this, new QuestionViewModelFactory(RetroFitInstance.getInstance()))
                 .get(QuestionsViewModel.class);
