@@ -22,6 +22,11 @@ import com.example.trendingso.databinding.ActivityMainBinding;
 import com.example.trendingso.viewmodels.OnDataSetListener;
 import com.example.trendingso.viewmodels.QuestionViewModelFactory;
 import com.example.trendingso.viewmodels.QuestionsViewModel;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.List;
 
@@ -41,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+
         setupRecyclerView();
         questionsViewModel = new ViewModelProvider(this, new QuestionViewModelFactory(RetroFitInstance.getInstance()))
                 .get(QuestionsViewModel.class);
