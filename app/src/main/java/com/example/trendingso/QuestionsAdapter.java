@@ -1,6 +1,9 @@
 package com.example.trendingso;
 
+import android.content.ClipData;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,8 +18,10 @@ import java.util.List;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionsViewHolder> {
     private AsyncListDiffer<Question> mDiffer;
-    public QuestionsAdapter() {
+    private ItemClickCallback itemClickCallback;
+    public QuestionsAdapter(ItemClickCallback itemClickCallback) {
         mDiffer = new AsyncListDiffer<>(this, diffCallback);
+        this.itemClickCallback = itemClickCallback;
     }
 
     public class QuestionsViewHolder extends RecyclerView.ViewHolder{
@@ -36,8 +41,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
     @Override
     public void onBindViewHolder(@NonNull QuestionsAdapter.QuestionsViewHolder holder, int position) {
-        holder.binding.setQuestion(mDiffer.getCurrentList().get(position));
+        Question question = mDiffer.getCurrentList().get(position);
+        holder.binding.setQuestion(question);
         holder.binding.executePendingBindings();
+        holder.binding.cardView.setOnClickListener(view -> {
+            itemClickCallback.onClick(question);
+        });
     }
 
     @Override
@@ -58,7 +67,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
     public void submitList(List<Question> data) {
         mDiffer.submitList(data);
     }
-    public Question getItem(int position) {
-        return mDiffer.getCurrentList().get(position);
+    public interface ItemClickCallback{
+        void onClick(Question question);
     }
 }

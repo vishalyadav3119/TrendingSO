@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.example.trendingso.viewmodels.QuestionViewModelFactory;
 import com.example.trendingso.viewmodels.QuestionsViewModel;
 
 import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,34 +52,18 @@ public class MainActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.INVISIBLE);
             }
         })).get(QuestionsViewModel.class);
-//        new Thread(this::callAPIAndUpdateUI).start();
     }
 
     private void setupRecyclerView() {
-        questionsAdapter = new QuestionsAdapter();
+        questionsAdapter = new QuestionsAdapter(new QuestionsAdapter.ItemClickCallback() {
+            @Override
+            public void onClick(Question question) {
+                Intent myIntent = new Intent(MainActivity.this, WebViewActivity.class);
+                myIntent.putExtra("url", question.getLink());
+                startActivity(myIntent);
+            }
+        });
         binding.recyclerView.setAdapter(questionsAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void callAPIAndUpdateUI() {
-        RetroFitInstance.getInstance().getQuestions(ORDER, SORT, SITE, FILTER, KEY)
-                .enqueue(new Callback<JsonResponse>() {
-                    @Override
-                    public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            runOnUiThread(() -> {
-                                binding.progressBar.setVisibility(View.INVISIBLE);
-                                questionsAdapter.submitList(response.body().getQuestions());
-                            });
-                        } else {
-                            Log.e(TAG, "onResponse: response not successful for api");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonResponse> call, Throwable t) {
-                        Log.e(TAG, "onFailure: Failed API get request: " + t.getMessage());
-                    }
-                });
     }
 }
